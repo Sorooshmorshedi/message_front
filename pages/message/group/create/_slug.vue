@@ -87,6 +87,23 @@
                 v-model="about"
 
               ></v-textarea>
+              <v-switch
+                class="ml-5"
+                v-model="private"
+                label="private"
+                color="orange"
+                hide-details
+              ></v-switch>
+
+              <v-textarea
+                v-if="private == false"
+                class="pt-3 pr-6 pl-6 orange--text"
+                label="link"
+                outlined
+                v-model="link"
+                rows="1"
+                row-height="13"
+              ></v-textarea>
 
 
               <v-card-actions class="justify-end">
@@ -109,6 +126,8 @@ export default {
   data() {
     return {
       data: null,
+      private: false,
+      link: null,
       name: '',
       pic: null,
       dialog: false,
@@ -163,6 +182,8 @@ export default {
       this.$axios.$post('http://127.0.0.1:8000/api/group', {
         name:this.name,
         creator: this.slug,
+        link: this.link,
+        private: this.private,
         about: this.about,
         members: this.account})
         .then(response => {

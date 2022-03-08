@@ -14,13 +14,37 @@
           </v-img>
         </v-avatar>
 
-        <v-toolbar-title>new Channel</v-toolbar-title>
+        <v-toolbar-title>edit Channel</v-toolbar-title>
 
         <v-spacer></v-spacer>
 
-        <v-btn icon>
-          <v-icon>mdi-link</v-icon>
+        <v-btn
+          v-for="c in channel"
+          v-if="c.creator == slug"
+          color="red darken-2"
+          class="ma-2"
+          dark
+          @click="dialog = true"
+        >
+          delete
         </v-btn>
+        <v-dialog
+          v-model="dialog"
+          max-width="500px"
+        >
+          <v-card>
+            <v-card-title>
+              <span>sure you want delete?</span>
+            </v-card-title>
+            <v-card-subtitle>all the message and information of this channel will be deleted...</v-card-subtitle>
+            <v-card-actions >
+              <v-btn @click="DeleteChannel" text color="red">delete</v-btn>
+              <v-btn text color="withe">cancell</v-btn>
+
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
       </v-app-bar>
 
       <v-container>
@@ -73,7 +97,7 @@
 
               <v-card-actions class="justify-end">
                 <v-btn color="orange" @click="CreateChannel" >
-                  <v-icon>mdi-plus</v-icon>
+                  <v-icon>mdi-pencil</v-icon>
                 </v-btn>
               </v-card-actions>
 
@@ -94,6 +118,7 @@ export default {
       private: false,
       data: [],
       name: '',
+      id: this.$route.query.id,
       pic: null,
       dialog: false,
       slug: this.$route.params.slug,
@@ -107,10 +132,18 @@ export default {
       account_name : [],
       accounts: [],
       my_user: '',
+      channel:'',
 
     }
   },
+  beforeMount() {
+    this.$axios.$get('http://127.0.0.1:8000/api/channel/' + this.id)
+      .then(response => {
+        this.channel = response
+        console.log(this.channel[0].creator)
+      });
 
+  },
   methods: {
     uploadFile() {
       this.file = this.$refs.file.files[0];
@@ -129,15 +162,26 @@ export default {
       formData.append("about", this.about);
       this.data = formData
       console.log(this.data)
-      this.$axios.$post('http://127.0.0.1:8000/api/channel', this.data)
+      this.$axios.$put('http://127.0.0.1:8000/api/channel/' + this.id + '/', this.data)
         .then(response => {
           console.log(response)
-          window.alert('Channel created')
-          window.location.href = "http://127.0.0.1:3000/message/channel/" + this.slug + '/?id=' + response.id;
+          window.alert('Channel edit')
+          window.location.href = "http://127.0.0.1:3000/message/channel/" + this.slug + '/?id=' + response.id
+        }).catch(response => {
+        window.alert(response)
+      })
+    },
+    DeleteChannel() {
+      this.$axios.$delete('http://127.0.0.1:8000/api/channel/' + this.id + '/')
+        .then(response => {
+          console.log(response)
+          window.alert('Channel deleted')
+          window.location.href = "http://127.0.0.1:3000/message/" + this.slug
         }).catch(response => {
         window.alert(response)
       })
     }
+
   },
 
 

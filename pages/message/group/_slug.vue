@@ -8,6 +8,7 @@
         >
 
           <v-card
+            v-if="g.private == false"
             max-width="600"
             class="mx-auto mt-16"
             v-for="g in group"
@@ -26,6 +27,29 @@
               <v-toolbar-title>{{ g.name }}</v-toolbar-title>
 
               <v-spacer></v-spacer>
+              <v-btn
+                v-if="group_admins.includes(parseInt(slug))"
+                color="grey darken-3"
+                class="ma-2"
+                x-small
+                dark
+                @click="dialog4 = true"
+              >
+                invite link
+              </v-btn>
+              <v-dialog
+                v-model="dialog4"
+                max-width="500px"
+              >
+                <v-card>
+                  <v-card-title>
+                    <a>http://127.0.0.1:8000/api/group/link/{{ g.token }}</a>
+                  </v-card-title>
+                  <v-card-actions>
+
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
               <v-dialog
                 v-model="dialog"
                 persistent
@@ -35,6 +59,8 @@
                   <v-btn
                     color="grey darken-3"
                     dark
+                    x-small
+
                     v-bind="attrs"
                     v-on="on"
                   >
@@ -47,13 +73,174 @@
                   </v-card-title>
                   <v-card-text>{{
                       g.creator_name
-                    }}</v-card-text>
+                    }}
+                  </v-card-text>
                   <v-card-title class="text-h7">
                     about
                   </v-card-title>
                   <v-card-text>{{
                       g.about
-                    }}</v-card-text>
+                    }}
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="green darken-1"
+                      text
+                      @click="dialog = false"
+                    >
+                      close
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <nuxt-link :to="{ path: '/message/group/edit/'+ $route.params.slug + '/?id=' + id}">
+                <v-btn
+                  v-if="group_admins.includes(parseInt(slug))"
+                  color="grey darken-3"
+                  class="ma-2"
+                  x-small
+                  dark
+                >
+                  edit
+                </v-btn>
+              </nuxt-link>
+
+            </v-app-bar>
+
+            <v-container>
+              <v-row dense>
+                <v-col cols="12">
+                  <div v-for="message in messages">
+
+                    <v-card
+                      v-if="group_admins.includes(parseInt(slug))"
+                      color="yellow darken-1"
+                      width="400"
+
+                      class="mt-2 mb-2"
+                      style="margin-left: 180px;"
+                    >
+                      <v-card-title>
+                        <v-avatar>
+                          <v-img :src=message.sender_pic></v-img>
+                        </v-avatar>
+                        <h4 style="color: black; margin-left: 5px;">{{ message.sender_name }}</h4>
+
+                        <v-card-subtitle>{{ message.date }}</v-card-subtitle>
+                      </v-card-title>
+                      <v-img :src=message.pic></v-img>
+
+                      <v-card-subtitle style="margin-left: 60px; color: black">{{ message.text }}</v-card-subtitle>
+                      <v-btn class="ma-2 " x-small icon right>
+                        <v-icon @click="deleteMessage(message.id)">mdi-delete-outline</v-icon>
+                      </v-btn>
+
+                    </v-card>
+                    <v-card
+                      width="400"
+                      class="mt-2 mb-2"
+
+                      v-if="message.sender != slug"
+
+                      color="grey darken-3"
+                      dark
+                    >
+                      <v-card-title>
+                        <v-avatar>
+                          <v-img :src=message.sender_pic></v-img>
+                        </v-avatar>
+                        <h4 style="margin-left: 5px;">{{ message.sender_name }}</h4>
+
+                        <v-card-subtitle style="color: gold">{{ message.date }}</v-card-subtitle>
+                      </v-card-title>
+                      <v-card-subtitle style="margin-left: 60px">{{ message.text }}</v-card-subtitle>
+                      <v-btn class="ma-2 " x-small icon right>
+                        <v-icon @click="LikeMessage(message)">mdi-heart</v-icon>
+                      </v-btn>
+                    </v-card>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-container>
+
+          </v-card>
+          <v-card
+            v-else-if="group_members.includes(parseInt(slug))"
+            max-width="600"
+            class="mx-auto mt-16"
+            v-for="g in group"
+          >
+            <v-app-bar
+              dark
+              color="amber darken-2"
+            >
+              <v-avatar right class="mr-2">
+                <v-img
+                  lazy-src="https://play-lh.googleusercontent.com/fgt7dyhffQu9eHEYf1rfrL_xYupnY4bWa1A3PUt_7xXAi5Gi6LxW3SLMaPQwEH37JV4"
+                  :src=g.pic>
+                </v-img>
+              </v-avatar>
+
+              <v-toolbar-title>{{ g.name }}</v-toolbar-title>
+
+              <v-spacer></v-spacer>
+              <v-btn
+                v-if="g.creator == slug"
+                color="grey darken-3"
+                class="ma-2"
+                x-small
+                dark
+                @click="dialog3 = true"
+              >
+                invite link
+              </v-btn>
+              <v-dialog
+                v-model="dialog3"
+                max-width="500px"
+              >
+                <v-card>
+                  <v-card-title>
+                    <a>http://127.0.0.1:8000/api/group/link/{{ g.token }}</a>
+                  </v-card-title>
+                  <v-card-actions>
+
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+              <v-dialog
+                v-model="dialog"
+                persistent
+                max-width="290"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    color="grey darken-3"
+                    dark
+                    v-bind="attrs"
+                    x-small
+
+                    v-on="on"
+                  >
+                    about
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-card-title class="text-h7">
+                    creator
+                  </v-card-title>
+                  <v-card-text>{{
+                      g.creator_name
+                    }}
+                  </v-card-text>
+                  <v-card-title class="text-h7">
+                    about
+                  </v-card-title>
+                  <v-card-text>{{
+                      g.about
+                    }}
+                  </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -125,9 +312,11 @@
             </v-container>
 
           </v-card>
+
           <v-card
             width="600"
             class="mx-auto mt-1"
+            v-if="group_members.includes(parseInt(slug))"
           >
             <v-card-subtitle>choose image</v-card-subtitle>
             <v-card-text>
@@ -161,7 +350,115 @@
               color="amber darken-2"
             >
 
-              <v-toolbar-title>members </v-toolbar-title>
+              <v-toolbar-title>members</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn
+                v-if="group_admins.includes(parseInt(slug))"
+                color="grey darken-3"
+                class="ma-2"
+                fab
+                small
+                dark
+                @click="dialog3 = true"
+              >
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+              <v-dialog
+                v-model="dialog3"
+                max-width="500px"
+              >
+                <v-card>
+                  <v-card-title>
+                    <span>add members</span>
+                    <v-spacer></v-spacer>
+                    <v-menu
+                      bottom
+                      left
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-autocomplete
+                          class="ml-2 mr-2 "
+                          v-model="account"
+                          :items="accounts"
+                          item-text="item.id"
+                          item-value="id"
+                          deletable-chips
+                          filled
+                          chips
+                          multiple
+                          rounded
+                        >
+                          <template v-slot:selection="data">
+                            <v-chip
+                              v-bind="data.attrs"
+                              :input-value="data.selected"
+                              close
+                            >
+                              <v-avatar left>
+                                <v-img :src="data.item.pic"></v-img>
+                              </v-avatar>
+                              {{ data.item.name }} {{ data.item.lname }}
+                            </v-chip>
+                          </template>
+                          <template v-slot:item="data">
+                            <template>
+                              <v-list-item-avatar>
+                                <img :src="data.item.pic">
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                                <v-list-item-subtitle v-html="data.item.lname"></v-list-item-subtitle>
+                              </v-list-item-content>
+                            </template>
+                          </template>
+                        </v-autocomplete>
+                      </template>
+                    </v-menu>
+                  </v-card-title>
+                  <v-card-actions>
+                    <v-btn
+                      color="green"
+                      text
+                      @click="dialog3 = false"
+                    >
+                      Close
+                    </v-btn>
+                    <v-btn
+                      color="orange"
+                      text
+                      @click="addMember"
+                    >
+                      add
+                    </v-btn>
+
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <div v-if="g.creator != slug">
+
+                <v-btn
+                  v-if="group_members.includes(parseInt(slug))"
+                  color="grey darken-3"
+                  class="ma-2"
+                  small
+                  dark
+                  @click="leave"
+                >
+                  leave
+                </v-btn>
+              </div>
+              <div v-if="g.private == false">
+                <v-btn
+                  v-if="!group_members.includes(parseInt(slug))"
+                  color="grey darken-3"
+                  class="ma-2"
+                  small
+                  dark
+                  @click="joinMember"
+                >
+                  join
+                </v-btn>
+              </div>
 
 
             </v-app-bar>
@@ -209,13 +506,18 @@
 export default {
   data() {
     return {
+
+      group: '',
       data: [],
       name: '',
       pic: null,
       dialog: false,
       slug: this.$route.params.slug,
       id: this.$route.query.id,
-
+      dialog3: false,
+      dialog2: false,
+      dialog1: false,
+      dialog4: false,
       account: null,
       username: '',
       f_name: '',
@@ -223,14 +525,16 @@ export default {
       phone: '',
       about: '',
       file: null,
+      group_members: [],
       account_name: [],
       accounts: [],
       my_user: '',
       messages: '',
       friend: '',
       text: '',
-      group: '',
-      members:'',
+      channels: '',
+      members: '',
+      group_admins:[],
 
 
     }
@@ -249,12 +553,49 @@ export default {
     this.$axios.$get('http://127.0.0.1:8000/api/group/members/' + this.id)
       .then(response => {
         this.members = response
-        console.log(response)
+        for (const x in response) {
+          this.group_members.push(response[x].id)
+        }
+        console.log(this.group_members)
       });
+    this.$axios.$get('http://127.0.0.1:8000/api/group/admins/' + this.id)
+      .then(response => {
+        for (const y in response) {
+          this.group_admins.push(response[y].user)
+        }
+        console.log(this.group_admins)
+      });
+
+    this.$axios.$get('http://127.0.0.1:8000/api/user')
+      .then(response => {
+
+        for (let ac in response) {
+          this.accounts.push({
+            'name': response[ac].first_name,
+            'lname': response[ac].last_name,
+            'id': response[ac].id,
+            'pic': response[ac].profile_picture
+          })
+          this.account_name.push(response[ac].first_name)
+        }
+      })
+
 
   },
 
   methods: {
+    addMember() {
+      this.$axios.$post('http://127.0.0.1:8000/api/group/add/' + this.id, {
+        members: this.account
+      })
+        .then(response => {
+          console.log(response)
+          window.alert('members  added')
+          window.location.href = "http://127.0.0.1:3000/message/group/" + this.slug + '/?id=' + this.id
+
+        })
+    },
+
     uploadFile() {
       this.file = this.$refs.file.files[0];
       console.log(this.file)
@@ -305,6 +646,25 @@ export default {
         })
       })
     },
+    leave() {
+      this.$axios.$get('http://127.0.0.1:8000/api/group/leave/' + this.id + '/' + this.slug)
+        .then(response => {
+          console.log(response)
+          window.alert('you leaved')
+          window.location.href = "http://127.0.0.1:3000/message/" + this.slug
+
+        })
+    },
+    joinMember() {
+      this.$axios.$get('http://127.0.0.1:8000/api/group/join/' + this.id + '/' + this.slug)
+        .then(response => {
+          console.log(response)
+          window.alert('you joined')
+          window.location.href = "http://127.0.0.1:3000/message/group/" + this.slug + '/?id=' + this.id
+
+        })
+    },
+
 
   },
 

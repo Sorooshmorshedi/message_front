@@ -247,8 +247,8 @@ export default {
     gotoGroup(group) {
       window.location.href="/message/group/" + this.slug + '/?id=' + group.id
     },
-    gotoChannel(group) {
-      window.location.href="/message/channel/" + this.slug + '/?id=' + account.id
+    gotoChannel(channel) {
+      window.location.href="/message/channel/" + this.slug + '/?id=' + channel.id
     },
 
   },
