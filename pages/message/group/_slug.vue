@@ -134,7 +134,16 @@
                             :src=admin.admin_pic>
                           </v-img>
                         </v-avatar>
-                      <h5>{{admin.name}}</h5>
+                        <h5>{{ admin.name }}
+                          <v-icon
+                            color="red"
+                            small
+                            v-for="c in group"
+                            v-if="admin.user != c.creator"
+                            @click="deleteAdmin(admin.id)">
+                            > mdi-delete
+                          </v-icon>
+                        </h5>
                       </div>
                     </v-col>
                   </v-row>
@@ -327,7 +336,17 @@
                             :src=admin.admin_pic>
                           </v-img>
                         </v-avatar>
-                        <h5>{{admin.name}}</h5>
+                        <h5>{{ admin.name }}
+                          <v-icon
+                            color="red"
+                            small
+                            v-for="c in group"
+                            v-if="admin.user != c.creator"
+                            @click="deleteAdmin(admin.id)">
+                            > mdi-delete
+                          </v-icon>
+
+                        </h5>
                       </div>
                     </v-col>
                   </v-row>
@@ -646,7 +665,14 @@
                         <v-avatar size="30">
                           <v-img :src=member.profile_picture></v-img>
                         </v-avatar>
-                        <h4 style="margin-left: 5px;">{{ member.first_name }} {{ member.last_name }}</h4>
+                        <h4 style="margin-left: 5px;">{{ member.first_name }} {{ member.last_name }}
+                          <v-icon
+                            v-if="group_admins.includes(parseInt(slug))"
+                            @click="deletemember(member.id)"
+                            style="position: center"
+                          >mdi-delete
+                          </v-icon>
+                        </h4>
 
                       </v-card-title>
                     </v-card>
@@ -827,6 +853,16 @@ export default {
 
         })
     },
+    deletemember(id) {
+      this.$axios.$get('http://127.0.0.1:8000/api/group/leave/' + this.id + '/' + id)
+        .then(response => {
+          console.log(response)
+          window.alert('member deleted')
+          window.location.href = "http://127.0.0.1:3000/message/group/" + this.slug + '/?id=' + this.id
+
+        })
+    },
+
     joinMember() {
       this.$axios.$get('http://127.0.0.1:8000/api/group/join/' + this.id + '/' + this.slug)
         .then(response => {
@@ -837,13 +873,22 @@ export default {
         })
     },
     addAdmin() {
-      this.$axios.$post('http://127.0.0.1:8000/api/admin',{
+      this.$axios.$post('http://127.0.0.1:8000/api/admin', {
         user: this.account,
         group: this.id
       })
         .then(response => {
           console.log(response)
           window.alert('admin added')
+          window.location.href = "http://127.0.0.1:3000/message/group/" + this.slug + '/?id=' + this.id
+
+        })
+    },
+    deleteAdmin(id) {
+      this.$axios.$delete('http://127.0.0.1:8000/api/admin/' + id + '/')
+        .then(response => {
+          console.log(response)
+          window.alert('admin deleted')
           window.location.href = "http://127.0.0.1:3000/message/group/" + this.slug + '/?id=' + this.id
 
         })
