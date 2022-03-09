@@ -19,6 +19,9 @@
         <v-spacer></v-spacer>
 
         <v-btn
+          v-for="c in group"
+          v-if="c.creator == slug"
+
           color="red darken-2"
           class="ma-2"
           dark
@@ -145,10 +148,11 @@ export default {
         }
         console.log(this.group_members)
       });
-    this.$axios.$get('http://127.0.0.1:8000/group/' + this.id)
+    this.$axios.$get('http://127.0.0.1:8000/api/group/' + this.id + '/')
       .then(response => {
         this.group = response
         console.log(response)
+
       });
 
   },

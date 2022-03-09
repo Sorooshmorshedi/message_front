@@ -6,7 +6,7 @@
         cols="auto"
       >
         <v-card
-          width="500"
+          width="400"
           class="mx-auto mt-16"
         >
           <v-app-bar
@@ -32,7 +32,7 @@
                   class="mx-auto ma-2"
                   color="#424037"
                   dark
-                  max-width="450"
+                  max-width="380"
                   v-for="account in this.accounts"
                   @click="gotoChats(account)"
 
@@ -67,7 +67,7 @@
         cols="auto"
       >
         <v-card
-          width="500"
+          width="300"
           class="mx-auto mt-16"
         >
           <v-app-bar
@@ -131,7 +131,7 @@
         cols="auto"
       >
         <v-card
-          width="500"
+          width="300"
           class="mx-auto mt-16"
         >
           <v-app-bar

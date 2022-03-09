@@ -20,29 +20,6 @@
       <div>create a account and connect to your friends safe & easily</div>
     </v-card-text>
 
-    <v-text-field
-      class="ml-10 mr-10 mt-5 orange--text"
-      label="username"
-      v-model="username"
-      single-line
-      outlined
-    ></v-text-field>
-
-    <v-text-field
-      class="ml-10 mr-10 mt-5 orange--text mb-7"
-      v-model="password"
-      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-      :type="show1 ? 'text' : 'password'"
-      :rules="[rules.required, rules.min]"
-      name="input-10-1"
-      label="Password"
-      hint="At least 5 characters"
-      counter
-      single-line
-      outlined
-
-      @click:append="show1 = !show1"
-    ></v-text-field>
 
 
 
@@ -194,15 +171,8 @@ export default {
   },
   methods: {
     login() {
-      const formData = new FormData()
-      formData.append("username", this.username);
-      formData.append("password", this.password);
-      this.data = formData
-      this.$axios.$post('http://127.0.0.1:8000/api/log', {username:this.username,password:this.password })
-        .then(response => {
-          window.alert('Login in ... wait a moment')
-          window.location.href = "/profile/" + response.id
-        })
+      window.location.href = "http://127.0.0.1:8000/api/log"
+
     },
     signup() {
       const formData = new FormData()
@@ -215,8 +185,9 @@ export default {
       this.data1 = formData
       this.$axios.$post('http://127.0.0.1:8000/api/sign', this.data1)
         .then(response => {
+          console.log(response)
           window.alert('signing up ... wait a moment')
-          window.location.href = "/profile/" + response.id
+          window.location.href = "/"
 
 
         })

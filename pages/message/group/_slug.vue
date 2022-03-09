@@ -192,7 +192,7 @@
                   <div v-for="message in messages">
 
                     <v-card
-                      v-if="group_admins.includes(parseInt(slug))"
+                      v-if="message.sender == slug"
                       color="yellow darken-1"
                       width="400"
 
@@ -263,6 +263,18 @@
               <v-toolbar-title>{{ g.name }}</v-toolbar-title>
 
               <v-spacer></v-spacer>
+              <nuxt-link :to="{ path: '/message/group/edit/'+ $route.params.slug + '/?id=' + id}">
+                <v-btn
+                  v-if="group_admins.includes(parseInt(slug))"
+                  color="grey darken-3"
+                  class="ma-2"
+                  x-small
+                  dark
+                >
+                  edit
+                </v-btn>
+              </nuxt-link>
+
               <v-btn
                 v-if="group_admins.includes(parseInt(slug))"
                 color="grey darken-3"
@@ -283,51 +295,6 @@
                   </v-card-title>
                   <v-card-actions>
 
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-
-              <v-dialog
-                v-model="dialog"
-                persistent
-                max-width="290"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    color="grey darken-3"
-                    dark
-                    v-bind="attrs"
-                    x-small
-
-                    v-on="on"
-                  >
-                    about
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title class="text-h7">
-                    creator
-                  </v-card-title>
-                  <v-card-text>{{
-                      g.creator_name
-                    }}
-                  </v-card-text>
-                  <v-card-title class="text-h7">
-                    about
-                  </v-card-title>
-                  <v-card-text>{{
-                      g.about
-                    }}
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      color="green darken-1"
-                      text
-                      @click="dialog = false"
-                    >
-                      close
-                    </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -406,6 +373,51 @@
 
                   <v-card-actions>
                     <v-btn @click="addAdmin">add</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+              <v-dialog
+                v-model="dialog"
+                persistent
+                max-width="290"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    color="grey darken-3"
+                    dark
+                    v-bind="attrs"
+                    x-small
+
+                    v-on="on"
+                  >
+                    about
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-card-title class="text-h7">
+                    creator
+                  </v-card-title>
+                  <v-card-text>{{
+                      g.creator_name
+                    }}
+                  </v-card-text>
+                  <v-card-title class="text-h7">
+                    about
+                  </v-card-title>
+                  <v-card-text>{{
+                      g.about
+                    }}
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="green darken-1"
+                      text
+                      @click="dialog = false"
+                    >
+                      close
+                    </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
