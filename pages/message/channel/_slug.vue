@@ -130,6 +130,84 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+              <v-btn
+                v-if="channel_admins.includes(parseInt(slug))"
+                color="grey darken-3"
+                class="ma-2"
+                x-small
+                dark
+                @click="dialog5 = true"
+              >
+                adminstraitor
+              </v-btn>
+              <v-dialog
+                v-model="dialog5"
+                max-width="500px"
+              >
+                <v-card>
+                  <v-card-title>
+                    admins
+                  </v-card-title>
+                  <v-row class="justify-center">
+                    <v-col v-for="admin in admins"
+                           :key="admin.id"
+                           cols="auto">
+                      <div style="margin: 10px;">
+                        <v-avatar>
+                          <v-img
+                            lazy-src="https://play-lh.googleusercontent.com/fgt7dyhffQu9eHEYf1rfrL_xYupnY4bWa1A3PUt_7xXAi5Gi6LxW3SLMaPQwEH37JV4"
+                            :src=admin.admin_pic>
+                          </v-img>
+                        </v-avatar>
+                        <h5>{{admin.name}}</h5>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-card-title>
+                    add admin
+                  </v-card-title>
+
+                  <v-autocomplete
+                    class="ml-15 mr-15 "
+                    v-model="account"
+                    :items="accounts"
+                    item-text="item.id"
+                    item-value="id"
+                    deletable-chips
+                    filled
+                    chips
+                    rounded
+                  >
+                    <template v-slot:selection="data">
+                      <v-chip
+                        v-bind="data.attrs"
+                        :input-value="data.selected"
+                        close
+                      >
+                        <v-avatar left>
+                          <v-img :src="data.item.pic"></v-img>
+                        </v-avatar>
+                        {{ data.item.name }} {{ data.item.lname }}
+                      </v-chip>
+                    </template>
+                    <template v-slot:item="data">
+                      <template>
+                        <v-list-item-avatar>
+                          <img :src="data.item.pic">
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                          <v-list-item-subtitle v-html="data.item.lname"></v-list-item-subtitle>
+                        </v-list-item-content>
+                      </template>
+                    </template>
+                  </v-autocomplete>
+
+                  <v-card-actions>
+                    <v-btn @click="addAdmin">add</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </v-app-bar>
 
             <v-container>
@@ -390,6 +468,7 @@ export default {
       id: this.$route.query.id,
       dialog3: false,
       dialog2: false,
+      dialog5: false,
       dialog1: false,
       account: null,
       username: '',
@@ -408,6 +487,7 @@ export default {
       text: '',
       channels: '',
       members: '',
+      admins:'',
 
 
     }
@@ -434,6 +514,7 @@ export default {
       });
     this.$axios.$get('http://127.0.0.1:8000/api/channel/admins/' + this.id)
       .then(response => {
+        this.admins = response
         for (const y in response) {
           this.channel_admins.push(response[y].user)
         }
@@ -542,6 +623,19 @@ export default {
 
         })
     },
+    addAdmin() {
+      this.$axios.$post('http://127.0.0.1:8000/api/admin',{
+        user: this.account,
+        channel: this.id
+      })
+        .then(response => {
+          console.log(response)
+          window.alert('admin added')
+          window.location.href = "http://127.0.0.1:3000/message/channel/" + this.slug + '/?id=' + this.id
+
+        })
+    },
+
 
 
   },
