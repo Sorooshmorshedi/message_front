@@ -6,7 +6,7 @@
       >
         <v-toolbar
           flat
-          color=orange
+          color=primary
         >
           <v-icon>mdi-account</v-icon>
           <v-toolbar-title class="font-weight-light">
@@ -63,7 +63,8 @@
           <v-spacer></v-spacer>
           <nuxt-link :to="{ path: '/profile/'+ user }">
             <v-btn
-              color='orange'
+              class="ma-2"
+              color='primary'
             >
               cancell
             </v-btn>

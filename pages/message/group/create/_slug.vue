@@ -6,11 +6,11 @@
     >
       <v-app-bar
         dark
-        color="amber darken-2"
+        color="blue darken-2"
       >
         <v-avatar right class="mr-2">
           <v-img
-            src="https://cdn.dribbble.com/users/218750/screenshots/1310912/pennene.gif">
+            src="https://cdn.wccftech.com/wp-content/uploads/2018/02/Android-Messages.jpg">
           </v-img>
         </v-avatar>
 
@@ -31,7 +31,7 @@
               dark
             >
               <v-textarea
-                class="pt-3 pr-3 pl-3 orange--text"
+                class="pt-3 pr-3 pl-3 "
                 label="Group name"
                 auto-grow
                 outlined
@@ -80,7 +80,7 @@
                 </template>
               </v-autocomplete>
               <v-textarea
-                class="orange--text ma-2"
+                class=" ma-2"
                 outlined
                 name="input-7-4"
                 label="about gruop"
@@ -91,13 +91,13 @@
                 class="ml-5"
                 v-model="private"
                 label="private"
-                color="orange"
+                color="primary"
                 hide-details
               ></v-switch>
 
               <v-textarea
                 v-if="private == false"
-                class="pt-3 pr-6 pl-6 orange--text"
+                class="pt-3 pr-6 pl-6 "
                 label="link"
                 outlined
                 v-model="link"
@@ -107,7 +107,7 @@
 
 
               <v-card-actions class="justify-end">
-                <v-btn color="orange" @click="creatGroup" >
+                <v-btn color="primary" @click="creatGroup" >
                   <v-icon>mdi-account-multiple-plus-outline</v-icon>
                 </v-btn>
               </v-card-actions>

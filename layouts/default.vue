@@ -3,13 +3,13 @@
     <v-toolbar
       dark
       prominent
-      src="https://wallpaperaccess.com/full/1094648.jpg"
+      src="https://www.triangleprideband.com/wp-content/uploads/2021/06/blue-gradient-background-1.png"
     >
       <v-app-bar-nav-icon
         v-if="$route.params.slug != undefined"
       ></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Messaging app</v-toolbar-title>
+      <v-toolbar-title class="withe--text text--darken-2">Messaging app</v-toolbar-title>
 
       <v-spacer></v-spacer>
       <nuxt-link :to="{ path: '/profile/'+ $route.params.slug }">
@@ -17,7 +17,7 @@
           icon
           v-if="$route.params.slug != undefined"
         >
-          <v-icon>mdi-account</v-icon>
+          <v-icon color="withe">mdi-account</v-icon>
         </v-btn>
       </nuxt-link>
       <NuxtLink to="/">
@@ -25,7 +25,7 @@
           icon
           v-if="$route.params.slug != undefined"
         >
-          <v-icon>mdi-export</v-icon>
+          <v-icon color="withe">mdi-export</v-icon>
         </v-btn>
       </NuxtLink>
 
@@ -45,7 +45,7 @@
         flat
         tile
       >
-        <v-card-title class="amber darken-1">
+        <v-card-title class="blue lighten-2">
           <strong class="subheading grey--text text--darken-3">Get connected with Designer & devoloper on social
             networks!</strong>
           <v-spacer></v-spacer>

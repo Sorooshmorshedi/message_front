@@ -7,9 +7,9 @@
       height="400"
       width="600"
       class="white--text align-end"
-      src="https://i.pinimg.com/originals/07/39/61/0739613927cfc7c51d6b352119cd7294.gif"
+      src="https://cdn.dribbble.com/users/1200964/screenshots/3123306/icon_fffff.gif"
     >
-      <v-card-title>Soroosh messaging</v-card-title>
+      <v-card-title class="blue--text text--darken-3">Soroosh messaging</v-card-title>
     </v-img>
 
     <v-card-subtitle class="pb-0">
@@ -26,7 +26,7 @@
     <v-card-actions >
       <v-btn
         class="ml-3 grey--text text--darken-3"
-        color="amber darken-1"
+        color="blue darken-1"
         @click="login"
       >
         Login
@@ -40,7 +40,7 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-              color="amber darken-1"
+              color="blue darken-1"
               text
               dark
               v-bind="attrs"
@@ -62,7 +62,7 @@
                     md="4"
                   >
                     <v-text-field
-                      class="orange--text"
+                      class="blue--text"
                       label="username *"
                       v-model="username"
                     ></v-text-field>
@@ -73,7 +73,7 @@
                     md="4"
                   >
                     <v-text-field
-                      class="orange--text"
+                      class="blue--text"
                       label="first name"
                       v-model="first_name"
 
@@ -85,21 +85,21 @@
                     md="4"
                   >
                     <v-text-field
-                      class="orange--text"
+                      class="blue--text"
                       label="last name"
                       v-model="last_name"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      class="orange--text"
+                      class="blue--text"
                       label="Phone number"
                       v-model="phone"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      class="orange--text"
+                      class="blue--text"
                       label="Password *"
                       type="password"
                       v-model="password"
@@ -108,7 +108,7 @@
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      class="orange--text"
+                      class="blue--text"
                       label="repeat Password *"
                       type="password"
                       v-model="password1"
@@ -123,7 +123,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                color="amber darken-1"
+                color="blue darken-1"
                 text
                 @click="dialog = false"
               >

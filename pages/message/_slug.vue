@@ -11,11 +11,11 @@
         >
           <v-app-bar
             dark
-            color="amber darken-2"
+            color="blue darken-2"
           >
             <v-avatar right class="mr-2">
               <v-img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxFx11RlB0veQejTtQaVDYzl-RS65ORjMmxoy0IXqkZyaMBZV3M7oeV7MUOPSJKhGpjss&usqp=CAU">
+                src="https://cdn.wccftech.com/wp-content/uploads/2018/02/Android-Messages.jpg">
               </v-img>
             </v-avatar>
 
@@ -30,7 +30,7 @@
               <v-col cols="12">
                 <v-card
                   class="mx-auto ma-2"
-                  color="#424037"
+                  color="#484e52"
                   dark
                   max-width="380"
                   v-for="account in this.accounts"
@@ -72,11 +72,11 @@
         >
           <v-app-bar
             dark
-            color="amber darken-2"
+            color="blue darken-2"
           >
             <v-avatar right class="mr-2">
               <v-img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6yR0rNApUrTg4fHMRSE0CiMC5rEweK4Um_cprO-vAnLLgNAUHoB7D1cWItA3Fd2kK2gY&usqp=CAU">
+                src="https://res.cloudinary.com/familink/image/upload/f_auto/v1644226137/telegram_-_1024px.png">
               </v-img>
             </v-avatar>
 
@@ -91,7 +91,7 @@
               <v-col cols="12">
                 <v-card
                   class="mx-auto ma-2"
-                  color="#424037"
+                  color="#484e52"
                   dark
                   max-width="450"
                   v-for="group in this.groups"
@@ -136,11 +136,11 @@
         >
           <v-app-bar
             dark
-            color="amber darken-2"
+            color="blue darken-2"
           >
             <v-avatar right class="mr-2">
               <v-img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPp7jyyM5VmfcJMDNdqYMQWUgcrLNYOcdpV-WyQjCQAvlcl4uRSzNV83QiNmEdkwECHqc&usqp=CAU">
+                src="https://static10.tgstat.ru/channels/_0/61/61814e9a6d466ed8bdbf59d6cf0410b5.jpg">
               </v-img>
             </v-avatar>
 
@@ -155,7 +155,7 @@
               <v-col cols="12">
                 <v-card
                   class="mx-auto ma-2"
-                  color="#424037"
+                  color="#484e52"
                   dark
                   max-width="450"
                   v-for="channel in this.channels"

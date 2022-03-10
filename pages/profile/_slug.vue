@@ -2,7 +2,7 @@
   <div>
     <v-card
       v-for="acc in account"
-      class="mx-auto"
+      class="mt-15 mb-15 mx-auto"
       max-width="700"
     >
       <v-card
@@ -13,7 +13,7 @@
           <v-btn
             absolute
             bottom
-            color="yellow darken-3"
+            color="blue darken-3"
             right
             small
             fab
@@ -21,13 +21,13 @@
             <v-icon>mdi-account-edit-outline</v-icon>
           </v-btn>
         </nuxt-link>
-        <v-card-title class="mt-10 pa-3 grey darken-3 yellow--text text--darken-2">
+        <v-card-title class="mt-10 pa-3 grey darken-3 blue--text text--lighten-2">
           <h3 class="text-h6 font-weight-light text-center grow">
             {{ acc.username }}
           </h3>
           <v-avatar>
             <v-img
-              src="https://play-lh.googleusercontent.com/1SY9fvMhmu2vNpVe9ZVX8umz1zNeDHvq9oSmYGvvxUFW6dFsUXb2iihg_FlCfSwzOvY"></v-img>
+              src="https://img.bfmtv.com/c/630/420/ff8/1c9d1bb1341acbe4aafd97f5783c2.png"></v-img>
           </v-avatar>
         </v-card-title>
         <v-img
@@ -41,16 +41,16 @@
           dense
         >
           <v-timeline-item
-            color="yellow"
+            color="primary"
             small
           >
             <v-row class="pt-1">
               <v-col cols="3">
-                <strong style="color: orange">Account</strong>
+                <strong style="color: skyblue">Account</strong>
               </v-col>
               <v-col>
                 <strong>{{ acc.phone }}</strong>
-                <div class="text-caption" style="color: gold">
+                <div class="text-caption" style="color: skyblue">
                   {{ acc.username }}
                 </div>
               </v-col>
@@ -58,12 +58,12 @@
           </v-timeline-item>
 
           <v-timeline-item
-            color="yellow darken-1"
+            color="blue darken-1"
             small
           >
             <v-row class="pt-1">
               <v-col cols="3">
-                <strong style="color: orange">about</strong>
+                <strong style="color: skyblue">about</strong>
               </v-col>
               <v-col>
                 <strong>{{ acc.first_name }} {{ acc.last_name }}</strong>
@@ -72,12 +72,12 @@
           </v-timeline-item>
 
           <v-timeline-item
-            color="yellow darken-2"
+            color="blue darken-2"
             small
           >
             <v-row class="pt-1">
               <v-col cols="3">
-                <strong style="color: orange">Bio</strong>
+                <strong style="color: skyblue">Bio</strong>
               </v-col>
               <v-col>
                 <strong>{{ acc.bio }}</strong>
@@ -88,7 +88,7 @@
         <v-row>
           <v-col>
             <nuxt-link :to="{ path: '/message/'+ $route.params.slug }">
-              <v-btn color="orange">inbox</v-btn>
+              <v-btn color="primary">inbox</v-btn>
             </nuxt-link>
           </v-col>
           <v-col>

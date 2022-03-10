@@ -15,7 +15,7 @@
           >
             <v-app-bar
               dark
-              color="amber darken-2"
+              color="blue darken-2"
             >
               <v-avatar right class="mr-2">
                 <v-img
@@ -202,12 +202,29 @@
 
                     <v-card
                       v-if="message.sender == slug"
-                      color="yellow darken-1"
+                      color=#8fcbf2
                       width="400"
 
                       class="mt-2 mb-2"
                       style="margin-left: 180px;"
                     >
+                      <v-card-subtitle v-if="message.reply != null">
+                        <v-banner
+                          color=#cfebfc
+                          class="grey--text text--darken-3"
+                          single-line
+                        >
+                          <v-icon
+                            slot="icon"
+                            color=primary
+                            size="36"
+                          >
+                            mdi-arrow-left-bottom-bold
+                          </v-icon>
+                          replay to {{ message.replay_to }}
+                          <v-chip small class="ml-2">{{ message.replay_text }}</v-chip>
+                        </v-banner>
+                      </v-card-subtitle>
                       <v-card-title>
                         <v-avatar>
                           <v-img :src=message.sender_pic></v-img>
@@ -233,18 +250,61 @@
                       color="grey darken-3"
                       dark
                     >
+                      <v-card-subtitle v-if="message.reply != null">
+                        <v-banner
+                          color=#b5b5b5
+                          class="grey--text text--darken-3"
+                          single-line
+                        >
+                          <v-icon
+                            slot="icon"
+                            color=primary
+                            size="36"
+                          >
+                            mdi-arrow-left-bottom-bold
+                          </v-icon>
+                          replay to {{ message.replay_to }}
+                          <v-chip small class="ml-2">{{ message.replay_text }}</v-chip>
+                        </v-banner>
+                      </v-card-subtitle>
+
                       <v-card-title>
                         <v-avatar>
                           <v-img :src=message.sender_pic></v-img>
                         </v-avatar>
                         <h4 style="margin-left: 5px;">{{ message.sender_name }}</h4>
 
-                        <v-card-subtitle style="color: gold">{{ message.date }}</v-card-subtitle>
+                        <v-card-subtitle style="color: dodgerblue">{{ message.date }}</v-card-subtitle>
                       </v-card-title>
                       <v-card-subtitle style="margin-left: 60px">{{ message.text }}</v-card-subtitle>
-                      <v-btn class="ma-2 " x-small icon right>
+                      <v-btn class="ml-5 " x-small icon>
                         <v-icon @click="LikeMessage(message)">mdi-heart</v-icon>
                       </v-btn>
+                      <v-btn class="ma-2 " x-small icon right>
+                        <v-icon @click="setRep(message) ,dialog6 = true">mdi-arrow-left-bottom-bold</v-icon>
+                      </v-btn>
+                      <v-dialog
+                        v-model="dialog6"
+                        max-width="500px"
+                      >
+                        <v-card>
+                          <v-card-title>
+                            <span>replay</span>
+                          </v-card-title>
+                          <v-card-actions>
+                            <v-text-field
+                              class="ml-5 "
+                              label="message"
+                              v-model="rep_text"
+                              outlined
+                            ></v-text-field>
+                            <v-btn fab small class="orange">
+                              <v-icon @click=" replay() , dialog3 = false">mdi-send</v-icon>
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+
                     </v-card>
                   </div>
                 </v-col>
@@ -260,7 +320,7 @@
           >
             <v-app-bar
               dark
-              color="amber darken-2"
+              color="blue darken-2"
             >
               <v-avatar right class="mr-2">
                 <v-img
@@ -449,12 +509,29 @@
 
                     <v-card
                       v-if="message.sender == slug"
-                      color="yellow darken-1"
+                      color=#8fcbf2
                       width="400"
 
                       class="mt-2 mb-2"
                       style="margin-left: 180px;"
                     >
+                      <v-card-subtitle v-if="message.reply != null">
+                        <v-banner
+                          color=#cfebfc
+                          class="grey--text text--darken-3"
+                          single-line
+                        >
+                          <v-icon
+                            slot="icon"
+                            color=primary
+                            size="36"
+                          >
+                            mdi-arrow-left-bottom-bold
+                          </v-icon>
+                          replay to {{ message.replay_to }}
+                          <v-chip small class="ml-2">{{ message.replay_text }}</v-chip>
+                        </v-banner>
+                      </v-card-subtitle>
                       <v-card-title>
                         <v-avatar>
                           <v-img :src=message.sender_pic></v-img>
@@ -480,18 +557,63 @@
                       color="grey darken-3"
                       dark
                     >
+                      <v-card-subtitle v-if="message.reply != null">
+                        <v-banner
+                          color=#b5b5b5
+                          class="grey--text text--darken-3"
+                          single-line
+                        >
+                          <v-icon
+                            slot="icon"
+                            color=#ffa600
+                            size="36"
+                          >
+                            mdi-arrow-left-bottom-bold
+                          </v-icon>
+                          replay to {{ message.replay_to }}
+                          <v-chip small class="ml-2">{{ message.replay_text }}</v-chip>
+                        </v-banner>
+                      </v-card-subtitle>
+
                       <v-card-title>
                         <v-avatar>
                           <v-img :src=message.sender_pic></v-img>
                         </v-avatar>
                         <h4 style="margin-left: 5px;">{{ message.sender_name }}</h4>
 
-                        <v-card-subtitle style="color: gold">{{ message.date }}</v-card-subtitle>
+                        <v-card-subtitle style="color: dodgerblue">{{ message.date }}</v-card-subtitle>
                       </v-card-title>
                       <v-card-subtitle style="margin-left: 60px">{{ message.text }}</v-card-subtitle>
                       <v-btn class="ma-2 " x-small icon right>
                         <v-icon @click="LikeMessage(message)">mdi-heart</v-icon>
                       </v-btn>
+                      <v-btn class="ma-2 " x-small icon right>
+                        <v-icon @click="setRep(message) ,dialog6 = true">mdi-arrow-left-bottom-bold</v-icon>
+                      </v-btn>
+                      <v-dialog
+                        v-model="dialog6"
+                        max-width="500px"
+                      >
+                        <v-card>
+                          <v-card-title>
+                            <span>replay</span>
+                          </v-card-title>
+
+
+                          <v-card-actions>
+                            <v-text-field
+                              class="ml-5 "
+                              label="message"
+                              v-model="rep_text"
+                              outlined
+                            ></v-text-field>
+                            <v-btn fab small class="primary">
+                              <v-icon @click=" replay() , dialog3 = false">mdi-send</v-icon>
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+
                     </v-card>
                   </div>
                 </v-col>
@@ -516,7 +638,7 @@
                 v-model="text"
                 outlined
               ></v-text-field>
-              <v-btn fab small class="orange">
+              <v-btn fab small class="primary">
                 <v-icon @click="send">mdi-send</v-icon>
               </v-btn>
 
@@ -534,7 +656,7 @@
           >
             <v-app-bar
               dark
-              color="amber darken-2"
+              color="blue darken-2"
             >
 
               <v-toolbar-title>members</v-toolbar-title>
@@ -546,12 +668,12 @@
                 fab
                 small
                 dark
-                @click="dialog3 = true"
+                @click="dialog7 = true"
               >
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
               <v-dialog
-                v-model="dialog3"
+                v-model="dialog7"
                 max-width="500px"
               >
                 <v-card>
@@ -666,13 +788,15 @@
                           <v-img :src=member.profile_picture></v-img>
                         </v-avatar>
                         <h4 style="margin-left: 5px;">{{ member.first_name }} {{ member.last_name }}
-                          <v-btn class="ml-8" x-small color="red darken-2" fab v-for="g in group" v-if=" member.id != g.creator">
+                          <v-btn class="ml-8" x-small color="red darken-2" fab v-for="g in group"
+                                 v-if=" member.id != g.creator">
                             <v-icon
                               v-if="group_admins.includes(parseInt(slug))"
                               @click="deletemember(member.id)"
                               style="position: center"
                             >mdi-delete-outline
-                            </v-icon>s
+                            </v-icon>
+
                           </v-btn>
                         </h4>
 
@@ -690,11 +814,6 @@
 
     </div>
 
-    </v-col>
-
-    </v-row>
-    </v-container>
-    </v-card>
   </div>
 </template>
 
@@ -715,6 +834,8 @@ export default {
       dialog1: false,
       dialog4: false,
       dialog5: false,
+      dialog7: false,
+      dialog6: false,
       account: null,
       username: '',
       f_name: '',
@@ -733,6 +854,8 @@ export default {
       members: '',
       group_admins: [],
       admins: '',
+      rep: '',
+      rep_text: '',
 
 
     }
@@ -784,6 +907,12 @@ export default {
   },
 
   methods: {
+    setRep(message) {
+      console.log(message.id)
+      this.rep = message.id
+
+    },
+
     addMember() {
       this.$axios.$post('http://127.0.0.1:8000/api/group/add/' + this.id, {
         members: this.account
@@ -821,6 +950,24 @@ export default {
         window.alert(response)
       })
     },
+    replay() {
+      this.$axios.$post('http://127.0.0.1:8000/api/message', {
+        text: this.rep_text,
+        sender: this.slug,
+        group: this.id,
+        reply: this.rep,
+
+      })
+        .then(response => {
+          console.log(response)
+          window.alert('replay sent')
+          window.location.href = "http://127.0.0.1:3000/message/group/" + this.slug + '/?id=' + this.id
+        }).catch(response => {
+        window.alert(response)
+      })
+    },
+
+
     deleteMessage(id) {
       this.$axios.$delete('http://127.0.0.1:8000/api/message/' + id)
         .then(response => {

@@ -8,7 +8,7 @@
       >
         <v-app-bar
           dark
-          color="amber darken-2"
+          color="blue darken-3"
         >
           <v-avatar right class="mr-2">
             <v-img
@@ -33,12 +33,29 @@
 
                 <v-card
                   v-if="message.sender == slug"
-                  color="yellow darken-1"
+                  color=#8fcbf2
                   width="400"
 
                   class="mt-2 mb-2"
                   style="margin-left: 180px;"
                 >
+                  <v-card-subtitle v-if="message.reply != null">
+                    <v-banner
+                      color=#cfebfc
+                      class="grey--text text--darken-3"
+                      single-line
+                    >
+                      <v-icon
+                        slot="icon"
+                        color=primary
+                        size="36"
+                      >
+                        mdi-arrow-left-bottom-bold
+                      </v-icon>
+                      replay to {{ message.replay_to }}
+                      <v-chip small class="ml-2">{{ message.replay_text }}</v-chip>
+                    </v-banner>
+                  </v-card-subtitle>
                   <v-card-title>
                     <v-avatar>
                       <v-img :src=message.sender_pic></v-img>
@@ -47,10 +64,10 @@
 
                     <v-card-subtitle>{{ message.date }}</v-card-subtitle>
                   </v-card-title>
-                  <v-img :src = message.pic></v-img>
+                  <v-img :src=message.pic></v-img>
 
                   <v-card-subtitle style="margin-left: 60px; color: black">{{ message.text }}</v-card-subtitle>
-                  <v-btn class="ma-2 " x-small icon right >
+                  <v-btn class="ma-2 " x-small icon right>
                     <v-icon @click="deleteMessage(message.id)">mdi-delete-outline</v-icon>
                   </v-btn>
 
@@ -64,18 +81,61 @@
                   color="grey darken-3"
                   dark
                 >
+                  <v-card-subtitle v-if="message.reply != null">
+                    <v-banner
+                      color=#b5b5b5
+                      class="grey--text text--darken-3"
+                      single-line
+                    >
+                      <v-icon
+                        slot="icon"
+                        color=#484e52
+                        size="36"
+                      >
+                        mdi-arrow-left-bottom-bold
+                      </v-icon>
+                      replay to {{ message.replay_to }}
+                      <v-chip small class="ml-2">{{ message.replay_text }}</v-chip>
+                    </v-banner>
+                  </v-card-subtitle>
+
                   <v-card-title>
                     <v-avatar>
                       <v-img :src=message.sender_pic></v-img>
                     </v-avatar>
                     <h4 style="margin-left: 5px;">{{ message.sender_name }}</h4>
 
-                    <v-card-subtitle style="color: gold">{{ message.date }}</v-card-subtitle>
+                    <v-card-subtitle style="color: dodgerblue">{{ message.date }}</v-card-subtitle>
                   </v-card-title>
                   <v-card-subtitle style="margin-left: 60px">{{ message.text }}</v-card-subtitle>
                   <v-btn class="ma-2 " x-small icon right>
-                    <v-icon @click="LikeMessage(message)" >mdi-heart</v-icon>
+                    <v-icon @click="LikeMessage(message)">mdi-heart</v-icon>
                   </v-btn>
+                  <v-btn class="ma-2 " x-small icon right>
+                    <v-icon @click="setRep(message) ,dialog3 = true">mdi-arrow-left-bottom-bold</v-icon>
+                  </v-btn>
+                  <v-dialog
+                    v-model="dialog3"
+                    max-width="500px"
+                  >
+                    <v-card>
+                      <v-card-title>
+                        <span>replay</span>
+                      </v-card-title>
+
+
+                      <v-card-actions>
+                        <v-text-field
+                          class="ml-5 "
+                          label="message"
+                          v-model="rep_text"
+                          outlined
+                        ></v-text-field>
+                        <v-btn fab small class="orange">
+                          <v-icon @click=" replay() , dialog3 = false">mdi-send</v-icon>
+                        </v-btn>                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
                 </v-card>
               </div>
             </v-col>
@@ -102,7 +162,7 @@
           v-model="text"
           outlined
         ></v-text-field>
-        <v-btn fab small class="orange">
+        <v-btn fab small class="primary">
           <v-icon @click="send">mdi-send</v-icon>
         </v-btn>
 
@@ -122,13 +182,15 @@
 export default {
   data() {
     return {
+      rep_text:'',
+      dialog3: false,
       data: [],
       name: '',
       pic: null,
       dialog: false,
       slug: this.$route.params.slug,
       id: this.$route.query.id,
-
+      rep : '',
       account: null,
       username: '',
       f_name: '',
@@ -160,6 +222,11 @@ export default {
   },
 
   methods: {
+    setRep(message){
+      console.log(message.id)
+      this.rep = message.id
+
+    },
     uploadFile() {
       this.file = this.$refs.file.files[0];
       console.log(this.file)
@@ -171,30 +238,49 @@ export default {
       formData.append("sender", this.slug);
       formData.append("receiver", this.id);
       formData.append("text", this.text);
-      if (this.file != null) {formData.append('pic', this.file)}
+      if (this.file != null) {
+        formData.append('pic', this.file)
+      }
       this.data = formData
       console.log(this.data)
       this.$axios.$post('http://127.0.0.1:8000/api/message', this.data)
         .then(response => {
           console.log(response)
           window.alert('message sent')
-          window.location.href="http://127.0.0.1:3000/message/pv/" + this.slug + '/?id=' + this.id
+          window.location.href = "http://127.0.0.1:3000/message/pv/" + this.slug + '/?id=' + this.id
         }).catch(response => {
         window.alert(response)
       })
     },
+    replay() {
+      this.$axios.$post('http://127.0.0.1:8000/api/message', {
+        text: this.rep_text,
+        sender: this.slug,
+        receiver: this.id,
+        reply: this.rep,
+
+      })
+        .then(response => {
+          console.log(response)
+          window.alert('replay sent')
+          window.location.href = "http://127.0.0.1:3000/message/pv/" + this.slug + '/?id=' + this.id
+        }).catch(response => {
+        window.alert(response)
+      })
+    },
+
     deleteMessage(id) {
       this.$axios.$delete('http://127.0.0.1:8000/api/message/' + id)
         .then(response => {
           console.log(response)
           window.alert('message deleted')
-          window.location.href="http://127.0.0.1:3000/message/pv/" + this.slug + '/?id=' + this.id
+          window.location.href = "http://127.0.0.1:3000/message/pv/" + this.slug + '/?id=' + this.id
         }).catch(response => {
         window.alert(response)
       })
     },
     LikeMessage(message) {
-      this.$axios.$post('http://127.0.0.1:8000/api/like' , {
+      this.$axios.$post('http://127.0.0.1:8000/api/like', {
         message: message.id,
         user: this.slug
       })
