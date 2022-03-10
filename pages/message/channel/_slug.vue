@@ -441,12 +441,14 @@
                           <v-img :src=member.profile_picture></v-img>
                         </v-avatar>
                         <h4 style="margin-left: 5px;">{{ member.first_name }} {{ member.last_name }}
-                          <v-icon
-                            v-if="channel_admins.includes(parseInt(slug))"
-                            @click="deletemember(member.id)"
-                            style="position: center"
-                          >mdi-delete
-                          </v-icon>
+                          <v-btn class="ml-8" x-small color="red darken-2" fab v-for="g in channels" v-if=" member.id != g.creator">
+                            <v-icon
+                              v-if="channel_admins.includes(parseInt(slug))"
+                              @click="deletemember(member.id)"
+                              style="position: center"
+                            >mdi-delete-outline
+                            </v-icon>
+                          </v-btn>
                         </h4>
 
                       </v-card-title>
