@@ -17,13 +17,13 @@
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
-        <v-btn
-          @click="logout"
-          icon
-          v-if="$route.params.slug != undefined"
-        >
-          <v-icon color="withe">mdi-export</v-icon>
-        </v-btn>
+      <v-btn
+        @click="logout"
+        icon
+        v-if="$route.params.slug != undefined"
+      >
+        <v-icon color="withe">mdi-export</v-icon>
+      </v-btn>
 
 
     </v-toolbar>
@@ -240,7 +240,7 @@ export default {
       this.$axios.$get('http://127.0.0.1:8000/api/logout')
         .then(response => {
           console.log(response)
-          window.location.href="http://127.0.0.1:3000/"
+          window.location.href = "http://127.0.0.1:3000/"
         })
     }
 

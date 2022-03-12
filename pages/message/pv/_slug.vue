@@ -25,19 +25,20 @@
               </v-avatar>
 
               <v-card-title style="color: cornflowerblue">
-                {{g.first_name}} {{g.last_name}}
+                {{ g.first_name }} {{ g.last_name }}
               </v-card-title>
               <v-card-subtitle>
-                @{{g.username}}
+                @{{ g.username }}
               </v-card-subtitle>
               <v-card-subtitle>
-              <v-icon small>mdi-cellphone-basic</v-icon>{{g.phone}}
+                <v-icon small>mdi-cellphone-basic</v-icon>
+                {{ g.phone }}
               </v-card-subtitle>
               <v-card-title style="color: cornflowerblue">
                 bio
               </v-card-title>
               <v-card-subtitle>
-                {{g.bio}}
+                {{ g.bio }}
               </v-card-subtitle>
 
 
@@ -66,19 +67,23 @@
         <v-container>
           <v-row dense>
             <v-col cols="12">
-              <div v-for="message in messages">
+              <v-btn v-if="messages.length > messagess.length" text color="blue" @click="messagess = messages">see
+                more
+              </v-btn>
+              <div v-for="message in messagess">
 
                 <v-card
+                  style="border-radius: 70px 10px 70px 70px;margin-left: 180px;"
                   v-if="message.sender == slug"
                   color=#8fcbf2
                   width="400"
-
                   class="mt-2 mb-2"
-                  style="margin-left: 180px;"
                 >
                   <v-card-subtitle v-if="message.reply != null">
                     <v-banner
+                      style="border-radius: 70px ;margin-left: 50px"
                       color=#cfebfc
+                      width="300px"
                       class="grey--text text--darken-3"
                       single-line
                     >
@@ -89,12 +94,12 @@
                       >
                         mdi-arrow-left-bottom-bold
                       </v-icon>
-                      replay to {{ message.replay_to }}
+                      replay to
                       <v-chip small class="ml-2">{{ message.replay_text }}</v-chip>
                     </v-banner>
                   </v-card-subtitle>
                   <v-card-title>
-                    <v-avatar>
+                    <v-avatar class="ml-3">
                       <v-img :src=message.sender_pic></v-img>
                     </v-avatar>
                     <h4 style="color: black; margin-left: 5px;">{{ message.sender_name }}</h4>
@@ -104,25 +109,26 @@
                   <v-img :src=message.pic></v-img>
 
                   <v-card-subtitle style="margin-left: 60px; color: black">{{ message.text }}</v-card-subtitle>
-                  <v-btn class="ma-2 " x-small icon right>
+                  <v-icon v-if="message.seened == true" color="green">mdi-check-all</v-icon>
+                  <v-icon v-if="message.seened == false" color="primary">mdi-check</v-icon>
+                  <v-btn class="ml-16 mb-2 " x-small icon right>
                     <v-icon @click="deleteMessage(message.id)">mdi-delete-outline</v-icon>
                   </v-btn>
 
                 </v-card>
                 <v-card
+                  style="border-radius: 10px 70px 70px 70px;"
                   width="400"
                   class="mt-2 mb-2"
-
                   v-if="message.sender != slug"
-
                   color="grey darken-3"
                   dark
                 >
                   <v-card-subtitle v-if="message.reply != null">
                     <v-banner
+                      style="border-radius: 70px ;margin-right: 50px"
                       color=#b5b5b5
                       class="grey--text text--darken-3"
-                      single-line
                     >
                       <v-icon
                         slot="icon"
@@ -131,7 +137,7 @@
                       >
                         mdi-arrow-left-bottom-bold
                       </v-icon>
-                      replay to {{ message.replay_to }}
+                      replay to
                       <v-chip small class="ml-2">{{ message.replay_text }}</v-chip>
                     </v-banner>
                   </v-card-subtitle>
@@ -144,11 +150,13 @@
 
                     <v-card-subtitle style="color: dodgerblue">{{ message.date }}</v-card-subtitle>
                   </v-card-title>
+                  <v-img :src=message.pic></v-img>
+
                   <v-card-subtitle style="margin-left: 60px">{{ message.text }}</v-card-subtitle>
-                  <v-btn class="ma-2 " x-small icon right>
+                  <v-btn class="ml-15 mb-2 " x-small icon right>
                     <v-icon @click="LikeMessage(message)">mdi-heart</v-icon>
                   </v-btn>
-                  <v-btn class="ma-2 " x-small icon right>
+                  <v-btn class=" float-right " x-small icon right>
                     <v-icon @click="setRep(message) ,dialog3 = true">mdi-arrow-left-bottom-bold</v-icon>
                   </v-btn>
                   <v-dialog
@@ -170,7 +178,8 @@
                         ></v-text-field>
                         <v-btn fab small class="orange">
                           <v-icon @click=" replay() , dialog3 = false">mdi-send</v-icon>
-                        </v-btn>                      </v-card-actions>
+                        </v-btn>
+                      </v-card-actions>
                     </v-card>
                   </v-dialog>
                 </v-card>
@@ -220,7 +229,7 @@ export default {
   data() {
     return {
       dialog5: false,
-      rep_text:'',
+      rep_text: '',
       dialog3: false,
       data: [],
       name: '',
@@ -228,7 +237,7 @@ export default {
       dialog: false,
       slug: this.$route.params.slug,
       id: this.$route.query.id,
-      rep : '',
+      rep: '',
       account: null,
       username: '',
       f_name: '',
@@ -242,6 +251,7 @@ export default {
       messages: '',
       friend: '',
       text: '',
+      messagess: '',
 
 
     }
@@ -250,6 +260,7 @@ export default {
     this.$axios.$get('http://127.0.0.1:8000/api/account/pv/' + this.slug + '/' + this.id)
       .then(response => {
         this.messages = response
+        this.messagess = this.messages.slice(-10)
         console.log(response)
       });
     this.$axios.$get('http://127.0.0.1:8000/api/user/' + this.id)
@@ -260,7 +271,7 @@ export default {
   },
 
   methods: {
-    setRep(message){
+    setRep(message) {
       console.log(message.id)
       this.rep = message.id
 

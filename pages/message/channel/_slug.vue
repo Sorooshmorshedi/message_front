@@ -229,18 +229,20 @@
             <v-container>
               <v-row dense>
                 <v-col cols="12">
-                  <div v-for="message in messages" v-if="channel_members.includes(parseInt(slug))">
+                  <v-btn v-if="messages.length > messagess.length" text color="blue" @click="messagess = messages">see more</v-btn>
+                  <div  v-for="message in messagess" v-if="channel_members.includes(parseInt(slug))">
 
                     <v-card
                       v-if="message.sender == slug"
                       color=#8fcbf2
                       width="400"
-
+                      style="border-radius: 70px 10px 70px 70px;margin-left: 180px;margin-left: 180px;"
                       class="mt-2 mb-2"
-                      style="margin-left: 180px;"
                     >
                       <v-card-subtitle v-if="message.reply != null">
                         <v-banner
+                          style="border-radius: 70px ;margin-left: 50px"
+                          width="300"
                           color=#cfebfc
                           class="grey--text text--darken-3"
                           single-line
@@ -268,22 +270,22 @@
                       <v-img :src=message.pic></v-img>
 
                       <v-card-subtitle style="margin-left: 60px; color: black">{{ message.text }}</v-card-subtitle>
-                      <v-btn class="ma-2 " x-small icon right>
+                      <v-btn class="mb-2 ml-16" x-small icon right>
                         <v-icon @click="deleteMessage(message.id)">mdi-delete-outline</v-icon>
                       </v-btn>
-
                     </v-card>
                     <v-card
                       width="400"
                       class="mt-2 mb-2"
-
                       v-if="message.sender != slug"
-
+                      style="border-radius: 10px 70px 70px 70px;"
                       color="grey darken-3"
                       dark
                     >
                       <v-card-subtitle v-if="message.reply != null">
                         <v-banner
+                          style="border-radius: 70px"
+                          width="300"
                           color=#b5b5b5
                           class="grey--text text--darken-3"
                           single-line
@@ -309,10 +311,10 @@
                         <v-card-subtitle style="color: dodgerblue">{{ message.date }}</v-card-subtitle>
                       </v-card-title>
                       <v-card-subtitle style="margin-left: 60px">{{ message.text }}</v-card-subtitle>
-                      <v-btn class="ma-2 " x-small icon right>
+                      <v-btn class="ml-16 mb-2" x-small icon right>
                         <v-icon @click="LikeMessage(message)">mdi-heart</v-icon>
                       </v-btn>
-                      <v-btn class="ma-2 " x-small icon right>
+                      <v-btn class="ma-2 float-right " x-small icon right>
                         <v-icon @click="setRep(message) ,dialog6 = true">mdi-arrow-left-bottom-bold</v-icon>
                       </v-btn>
                       <v-dialog
@@ -572,6 +574,7 @@ export default {
       accounts: [],
       my_user: '',
       messages: '',
+      messagess: '',
       friend: '',
       text: '',
       channels: '',
@@ -586,6 +589,8 @@ export default {
     this.$axios.$get('http://127.0.0.1:8000/api/channel/chats/' + this.id)
       .then(response => {
         this.messages = response
+        this.messagess = this.messages.slice(-10)
+
         console.log(response)
       });
     this.$axios.$get('http://127.0.0.1:8000/api/channel/' + this.id)
