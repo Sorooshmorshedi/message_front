@@ -243,8 +243,33 @@
                       <v-img :src=message.pic></v-img>
 
                       <v-card-subtitle style="margin-left: 60px; color: black">{{ message.text }}</v-card-subtitle>
+                      <v-icon @click="getSeen(message), dialog8 = true" small>mdi-eye</v-icon>
+                      <v-dialog
+                        v-model="dialog8"
+                        max-width="300px"
+                      >
+                        <v-card style="background-color: steelblue">
+                          <v-card v-for="seen in seens" width="280" class="mx-auto ma-1" height="55">
+                            <v-card-title>
+                              <v-avatar size="30">
+
+                                <v-img
+                                  :src=seen.seen_pic>
+                                </v-img>
+                              </v-avatar>
+                              <h4 style="margin-left: 20px">{{ seen.name }}</h4>
+                            </v-card-title>
+                            <v-card-actions>
+
+                            </v-card-actions>
+                          </v-card>
+                        </v-card>
+                      </v-dialog>
+
                       <v-btn class="mb-2 ml-16 " x-small icon right>
-                        <v-icon @click="deleteMessage(message.id)">mdi-delete-outline</v-icon>
+                        <v-icon class="mb-2" @click="deleteMessage(message.id)">mdi-delete-outline</v-icon>
+                        <v-icon class="mb-2" small @click="saveMessage(message)">mdi-bookmark</v-icon>
+
                       </v-btn>
 
                     </v-card>
@@ -288,6 +313,8 @@
                       <v-btn class="ml-16 mb-2 " x-small icon>
                         <v-icon @click="LikeMessage(message)">mdi-heart</v-icon>
                       </v-btn>
+                      <v-icon class="mb-2" small @click="saveMessage(message)">mdi-bookmark</v-icon>
+
                       <v-btn class="ma-2 float-right" x-small icon right>
                         <v-icon @click="setRep(message) ,dialog6 = true">mdi-arrow-left-bottom-bold</v-icon>
                       </v-btn>
@@ -562,8 +589,33 @@
                       <v-img :src=message.pic></v-img>
 
                       <v-card-subtitle style="margin-left: 60px; color: black">{{ message.text }}</v-card-subtitle>
+                      <v-icon @click="getSeen(message), dialog8 = true" small>mdi-eye</v-icon>
+                      <v-dialog
+                        v-model="dialog8"
+                        max-width="300px"
+                      >
+                        <v-card style="background-color: steelblue">
+                          <v-card v-for="seen in seens" width="280" class="mx-auto ma-1" height="55">
+                            <v-card-title>
+                              <v-avatar size="30">
+
+                                <v-img
+                                  :src=seen.seen_pic>
+                                </v-img>
+                              </v-avatar>
+                              <h4 style="margin-left: 20px">{{ seen.name }}</h4>
+                            </v-card-title>
+                            <v-card-actions>
+
+                            </v-card-actions>
+                          </v-card>
+                        </v-card>
+                      </v-dialog>
+
                       <v-btn class="mb-2 ml-16 " x-small icon right>
-                        <v-icon @click="deleteMessage(message.id)">mdi-delete-outline</v-icon>
+                        <v-icon class="mb-2 " @click="deleteMessage(message.id)">mdi-delete-outline</v-icon>
+                        <v-icon class="mb-2" small @click="saveMessage(message)">mdi-bookmark</v-icon>
+
                       </v-btn>
 
                     </v-card>
@@ -605,7 +657,9 @@
                       </v-card-title>
                       <v-card-subtitle style="margin-left: 60px">{{ message.text }}</v-card-subtitle>
                       <v-btn class="mb-2 ml-16 " x-small icon right>
-                        <v-icon @click="LikeMessage(message)">mdi-heart</v-icon>
+                        <v-icon class="mb-2" @click="LikeMessage(message)">mdi-heart</v-icon>
+                        <v-icon class="mb-2" small @click="saveMessage(message)">mdi-bookmark</v-icon>
+
                       </v-btn>
                       <v-btn class="ma-2 float-right " x-small icon right >
                         <v-icon @click="setRep(message) ,dialog6 = true">mdi-arrow-left-bottom-bold</v-icon>
@@ -877,11 +931,21 @@ export default {
       admins: '',
       rep: '',
       rep_text: '',
+      seens:'',
+      dialog8: false,
 
 
     }
   },
   mounted() {
+    this.$axios.$get('http://127.0.0.1:8000/api/seen/group/' + this.id + '/' + this.slug)
+      .then(response => {
+        console.log('-----')
+
+        console.log(response)
+        console.log('-----')
+      });
+
     this.$axios.$get('http://127.0.0.1:8000/api/group/chats/' + this.id)
       .then(response => {
         this.messages = response
@@ -935,6 +999,14 @@ export default {
       this.rep = message.id
 
     },
+    getSeen(message) {
+      this.$axios.$get('http://127.0.0.1:8000/api/message/seen/' + message.id)
+        .then(response => {
+          console.log(response)
+          this.seens = response
+        })
+    },
+
 
     addMember() {
       this.$axios.$post('http://127.0.0.1:8000/api/group/add/' + this.id, {
@@ -1065,10 +1137,18 @@ export default {
 
         })
     },
+    saveMessage(message) {
+      this.$axios.$post('http://127.0.0.1:8000/api/archive', {
+        user: this.slug,
+        message: message.id
+      })
+        .then(response => {
+          console.log(response)
+          window.alert('archived')
+        }).catch(response => {
+        window.alert('you arechived this')
+      })
+    },
 
-
-  },
-
-
-}
+  }}
 </script>

@@ -99,6 +99,27 @@
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
+                  <v-dialog
+                    v-model="dialog8"
+                    max-width="300px"
+                  >
+                    <v-card style="background-color: steelblue">
+                      <v-card v-for="seen in seens" width="280" class="mx-auto ma-1" height="55">
+                        <v-card-title>
+                          <v-avatar size="30">
+
+                            <v-img
+                              :src=seen.seen_pic>
+                            </v-img>
+                          </v-avatar>
+                          <h4 style="margin-left: 20px">{{ seen.name }}</h4>
+                        </v-card-title>
+                        <v-card-actions>
+
+                        </v-card-actions>
+                      </v-card>
+                    </v-card>
+                  </v-dialog>
 
 
                 </template>
@@ -229,8 +250,10 @@
             <v-container>
               <v-row dense>
                 <v-col cols="12">
-                  <v-btn v-if="messages.length > messagess.length" text color="blue" @click="messagess = messages">see more</v-btn>
-                  <div  v-for="message in messagess" v-if="channel_members.includes(parseInt(slug))">
+                  <v-btn v-if="messages.length > messagess.length" text color="blue" @click="messagess = messages">see
+                    more
+                  </v-btn>
+                  <div v-for="message in messagess" v-if="channel_members.includes(parseInt(slug))">
 
                     <v-card
                       v-if="message.sender == slug"
@@ -270,9 +293,13 @@
                       <v-img :src=message.pic></v-img>
 
                       <v-card-subtitle style="margin-left: 60px; color: black">{{ message.text }}</v-card-subtitle>
+                      <v-icon @click="getSeen(message), dialog8 = true" small>mdi-eye</v-icon>
+
                       <v-btn class="mb-2 ml-16" x-small icon right>
                         <v-icon @click="deleteMessage(message.id)">mdi-delete-outline</v-icon>
                       </v-btn>
+                      <v-icon class="mb-2" small @click="saveMessage(message)">mdi-bookmark</v-icon>
+
                     </v-card>
                     <v-card
                       width="400"
@@ -314,6 +341,8 @@
                       <v-btn class="ml-16 mb-2" x-small icon right>
                         <v-icon @click="LikeMessage(message)">mdi-heart</v-icon>
                       </v-btn>
+                      <v-icon class="mb-2" small @click="saveMessage(message)">mdi-bookmark</v-icon>
+
                       <v-btn class="ma-2 float-right " x-small icon right>
                         <v-icon @click="setRep(message) ,dialog6 = true">mdi-arrow-left-bottom-bold</v-icon>
                       </v-btn>
@@ -334,7 +363,7 @@
                               v-model="rep_text"
                               outlined
                             ></v-text-field>
-                            <v-btn fab small class="orange">
+                            <v-btn fab small class="blue">
                               <v-icon @click=" replay() , dialog3 = false">mdi-send</v-icon>
                             </v-btn>
                           </v-card-actions>
@@ -514,7 +543,8 @@
                           <v-img :src=member.profile_picture></v-img>
                         </v-avatar>
                         <h4 style="margin-left: 5px;">{{ member.first_name }} {{ member.last_name }}
-                          <v-btn class="ml-8" x-small color="red darken-2" fab v-for="g in channels" v-if=" member.id != g.creator">
+                          <v-btn class="ml-8" x-small color="red darken-2" fab v-for="g in channels"
+                                 v-if=" member.id != g.creator">
                             <v-icon
                               v-if="channel_admins.includes(parseInt(slug))"
                               @click="deletemember(member.id)"
@@ -562,6 +592,7 @@ export default {
       dialog1: false,
       dialog6: false,
       account: null,
+      dialog8: false,
       username: '',
       f_name: '',
       l_name: '',
@@ -580,12 +611,18 @@ export default {
       channels: '',
       members: '',
       admins: '',
-      rep:'',
-      rep_text:'',
+      rep: '',
+      rep_text: '',
+      seens: null,
 
     }
   },
   mounted() {
+    this.$axios.$get('http://127.0.0.1:8000/api/seen/channel/' + this.id + '/' + this.slug)
+      .then(response => {
+        console.log(response)
+      });
+
     this.$axios.$get('http://127.0.0.1:8000/api/channel/chats/' + this.id)
       .then(response => {
         this.messages = response
@@ -639,10 +676,17 @@ export default {
   },
 
   methods: {
-    setRep(message){
+    setRep(message) {
       console.log(message.id)
       this.rep = message.id
 
+    },
+    getSeen(message) {
+      this.$axios.$get('http://127.0.0.1:8000/api/message/seen/' + message.id)
+        .then(response => {
+          console.log(response)
+          this.seens = response
+        })
     },
 
     uploadFile() {
@@ -775,6 +819,19 @@ export default {
 
         })
     },
+    saveMessage(message) {
+      this.$axios.$post('http://127.0.0.1:8000/api/archive', {
+        user: this.slug,
+        message: message.id
+      })
+        .then(response => {
+          console.log(response)
+          window.alert('archived')
+        }).catch(response => {
+        window.alert('you arechived this')
+      })
+    },
+
 
 
   },

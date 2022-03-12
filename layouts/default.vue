@@ -97,6 +97,15 @@
             <v-list-item-title class="text-h7">new Message</v-list-item-title>
           </v-list-item>
 
+          <v-list-item
+            @click="Archived"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-bookmark</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="text-h7">Archive</v-list-item-title>
+          </v-list-item>
+
         </v-list-item-group>
 
       </v-list>
@@ -235,6 +244,9 @@ export default {
     },
     newM() {
       window.location.href = "http://127.0.0.1:3000/message/new/" + this.slug;
+    },
+    Archived() {
+      window.location.href = "http://127.0.0.1:3000/message/archived/" + this.slug;
     },
     logout() {
       this.$axios.$get('http://127.0.0.1:8000/api/logout')
