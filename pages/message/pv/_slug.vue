@@ -9,7 +9,44 @@
         <v-app-bar
           dark
           color="blue darken-3"
+          @click="dialog5 = true"
+
         >
+          <v-dialog
+            v-model="dialog5"
+            max-width="240px"
+          >
+            <v-card v-for="g in friend">
+              <v-avatar
+                class="ma-5"
+                size="200"
+              >
+                <v-img :src=g.profile_picture></v-img>
+              </v-avatar>
+
+              <v-card-title style="color: cornflowerblue">
+                {{g.first_name}} {{g.last_name}}
+              </v-card-title>
+              <v-card-subtitle>
+                @{{g.username}}
+              </v-card-subtitle>
+              <v-card-subtitle>
+              <v-icon small>mdi-cellphone-basic</v-icon>{{g.phone}}
+              </v-card-subtitle>
+              <v-card-title style="color: cornflowerblue">
+                bio
+              </v-card-title>
+              <v-card-subtitle>
+                {{g.bio}}
+              </v-card-subtitle>
+
+
+              <v-card-actions>
+
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
           <v-avatar right class="mr-2">
             <v-img
               lazy-src="https://play-lh.googleusercontent.com/fgt7dyhffQu9eHEYf1rfrL_xYupnY4bWa1A3PUt_7xXAi5Gi6LxW3SLMaPQwEH37JV4"
@@ -182,6 +219,7 @@
 export default {
   data() {
     return {
+      dialog5: false,
       rep_text:'',
       dialog3: false,
       data: [],

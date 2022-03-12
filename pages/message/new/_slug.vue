@@ -6,12 +6,12 @@
     >
       <v-app-bar
         dark
-        color="amber darken-2"
+        color="blue darken-2"
       >
         <v-avatar right class="mr-2">
           <v-img
             lazy-src="https://play-lh.googleusercontent.com/fgt7dyhffQu9eHEYf1rfrL_xYupnY4bWa1A3PUt_7xXAi5Gi6LxW3SLMaPQwEH37JV4"
-            src="https://cdn.dribbble.com/users/87229/screenshots/2190376/sendmail.gif">
+            src="https://cdn.dribbble.com/users/1677926/screenshots/7058161/media/387786c663902ebd9a4cae4955ceb1a4.gif">
           </v-img>
         </v-avatar>
 
@@ -71,7 +71,7 @@
                 </template>
               </v-autocomplete>
               <v-textarea
-                class="orange--text ma-2"
+                class="blue--text ma-2"
                 outlined
                 name="input-7-4"
                 label="Message"
@@ -85,7 +85,7 @@
 
 
               <v-card-actions class="justify-end">
-                <v-btn color="orange" @click="sendMessage" >
+                <v-btn color="primary" @click="sendMessage" >
                   <v-icon>mdi-send</v-icon>
                 </v-btn>
               </v-card-actions>

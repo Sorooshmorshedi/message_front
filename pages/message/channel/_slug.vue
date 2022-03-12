@@ -103,6 +103,14 @@
 
                 </template>
                 <v-card>
+                  <v-avatar
+                    class="ma-5"
+                    v-for="g in channels"
+                    size="200"
+                  >
+                    <v-img :src=g.pic></v-img>
+                  </v-avatar>
+
                   <v-card-title class="text-h7">
                     creator
                   </v-card-title>

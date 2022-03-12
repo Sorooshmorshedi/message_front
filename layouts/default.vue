@@ -6,35 +6,110 @@
       src="https://www.triangleprideband.com/wp-content/uploads/2021/06/blue-gradient-background-1.png"
     >
       <v-app-bar-nav-icon
+        @click.stop="drawer = !drawer"
         v-if="$route.params.slug != undefined"
       ></v-app-bar-nav-icon>
+      <v-toolbar-title
+        style="font-size: 50px; font-family: Cursive  ;"
+        class="withe--text text--darken-2"
 
-      <v-toolbar-title class="withe--text text--darken-2">Messaging app</v-toolbar-title>
+      >Messaging app
+      </v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <nuxt-link :to="{ path: '/profile/'+ $route.params.slug }">
         <v-btn
-          icon
-          v-if="$route.params.slug != undefined"
-        >
-          <v-icon color="withe">mdi-account</v-icon>
-        </v-btn>
-      </nuxt-link>
-      <NuxtLink to="/">
-        <v-btn
+          @click="logout"
           icon
           v-if="$route.params.slug != undefined"
         >
           <v-icon color="withe">mdi-export</v-icon>
         </v-btn>
-      </NuxtLink>
 
 
     </v-toolbar>
+    <v-navigation-drawer
+      v-model="drawer"
+      absolute
+      bottom
+      temporary
+    >
+      <v-list
+        nav
+        dense
+      >
+        <v-list-item-group
+          v-model="group"
+          active-class="blue--text text--blue-4"
+        >
+          <v-list-item v-for="a in account">
+            <v-list-item-avatar>
+              <v-img :src=a.profile_picture></v-img>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ a.username }}</v-list-item-title>
+            <v-list-item-subtitle class="text-h9 primary--text font-weight-light">online</v-list-item-subtitle>
+          </v-list-item>
+          <v-list-item
+            @click="goPro"
+            v-for="a in account" link>
+            <v-list-item-icon>
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-subtitle class="text-h8">
+                {{ a.first_name }} {{ a.last_name }}
+              </v-list-item-subtitle>
+              <v-list-item-subtitle>{{ a.phone }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item
+            @click="goInbox"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-inbox</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="text-h7">inbox</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item
+            @click="newG"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-account-group</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="text-h7">new group</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item
+            @click="newC"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-bullhorn</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="text-h7">new channel</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            @click="newM"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-message-plus</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="text-h7">new Message</v-list-item-title>
+          </v-list-item>
+
+        </v-list-item-group>
+
+      </v-list>
+
+    </v-navigation-drawer>
     <v-main>
-      <v-container>
-        <Nuxt/>
-      </v-container>
+      <v-card>
+        <v-container>
+          <Nuxt/>
+        </v-container>
+      </v-card>
+
+
     </v-main>
     <v-footer
       dark
@@ -123,9 +198,53 @@
 
 <script>
 export default {
-  name: 'DefaultLayout',
   data() {
-    return {}
+    return {
+      drawer: false,
+      group: null,
+      account: '',
+      slug: this.$route.params.slug,
+    }
+  },
+  watch: {
+    group() {
+      this.drawer = false
+    },
+  },
+  mounted() {
+    this.$axios.$get('http://127.0.0.1:8000/api/user/' + this.slug)
+      .then(response => {
+        this.account = response
+        console.log(response)
+        console.log(this.account)
+      })
+  },
+  methods: {
+    goInbox() {
+      window.location.href = "http://127.0.0.1:3000/message/" + this.slug;
+    },
+    goPro() {
+      window.location.href = "http://127.0.0.1:3000/profile/" + this.slug;
+    },
+    newG() {
+      window.location.href = "http://127.0.0.1:3000/message/group/create/" + this.slug;
+    },
+
+    newC() {
+      window.location.href = "http://127.0.0.1:3000/message/channel/create/" + this.slug;
+    },
+    newM() {
+      window.location.href = "http://127.0.0.1:3000/message/new/" + this.slug;
+    },
+    logout() {
+      this.$axios.$get('http://127.0.0.1:8000/api/logout')
+        .then(response => {
+          console.log(response)
+          window.location.href="http://127.0.0.1:3000/"
+        })
+    }
+
+
   }
 }
 </script>

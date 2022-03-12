@@ -2,7 +2,7 @@
   <div>
     <v-card
       max-width="400"
-      class="mx-auto mt-16"
+      class="mx-auto "
     >
       <v-app-bar
         dark

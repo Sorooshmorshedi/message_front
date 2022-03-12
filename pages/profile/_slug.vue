@@ -85,31 +85,15 @@
             </v-row>
           </v-timeline-item>
         </v-timeline>
-        <v-row>
-          <v-col>
-            <nuxt-link :to="{ path: '/message/'+ $route.params.slug }">
-              <v-btn color="primary">inbox</v-btn>
-            </nuxt-link>
-          </v-col>
-          <v-col>
-            <nuxt-link :to="{ path: '/message/new/'+ $route.params.slug }">
-              <v-btn color="grey">message</v-btn>
-            </nuxt-link>
-          </v-col>
-          <v-col>
-            <nuxt-link :to="{ path: '/message/group/create/'+ $route.params.slug }">
-              <v-btn color="grey">create group</v-btn>
-            </nuxt-link>
-
-          </v-col>
-          <v-col>
-            <nuxt-link :to="{ path: '/message/channel/create/'+ $route.params.slug }">
-              <v-btn color="grey">create channel</v-btn>
-            </nuxt-link>
-          </v-col>
+        <v-col>
+          <nuxt-link :to="{ path: '/message/'+ $route.params.slug }">
+            <v-btn color="primary" fab>
+              <v-icon>mdi-inbox</v-icon>
+            </v-btn>
+          </nuxt-link>
+        </v-col>
 
 
-        </v-row>
       </v-card-text>
     </v-card>
   </div>
