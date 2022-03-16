@@ -74,7 +74,7 @@
 
                 <v-card
                   style="border-radius: 70px 10px 70px 70px;margin-left: 180px;"
-                  v-if="message.sender == slug"
+                  v-if="message.sender == slug && message.date < now"
                   color=#8fcbf2
                   width="400"
                   class="mt-2 mb-2"
@@ -121,7 +121,7 @@
                   style="border-radius: 10px 70px 70px 70px;"
                   width="400"
                   class="mt-2 mb-2"
-                  v-if="message.sender != slug"
+                  v-if="message.sender != slug && message.date < now"
                   color="grey darken-3"
                   dark
                 >
@@ -179,7 +179,7 @@
                           v-model="rep_text"
                           outlined
                         ></v-text-field>
-                        <v-btn fab small class="orange">
+                        <v-btn fab small class="blue">
                           <v-icon @click=" replay() , dialog3 = false">mdi-send</v-icon>
                         </v-btn>
                       </v-card-actions>
@@ -214,6 +214,38 @@
         <v-btn fab small class="primary">
           <v-icon @click="send">mdi-send</v-icon>
         </v-btn>
+        <v-btn fab x-small class="primary">
+          <v-icon @click="dialog11 = true">mdi-clock</v-icon>
+        </v-btn>
+        <v-dialog
+          v-model="dialog11"
+          max-width="500px"
+        >
+          <v-card class="pa-3">
+            <v-card-title>
+              <span>timing message</span>
+            </v-card-title>
+
+            <v-time-picker
+              v-model="time"
+              :landscape="$vuetify.breakpoint.mdAndUp"
+              full-width
+              type="month"
+            ></v-time-picker>
+            <v-date-picker v-model="picker" class="ml-16"></v-date-picker>
+            <v-card-actions>
+              <v-text-field
+                class="ml-5 "
+                label="message"
+                v-model="rep_text"
+                outlined
+              ></v-text-field>
+              <v-btn fab small class="blue">
+                <v-icon @click=" timeSend() , dialog11 = false">mdi-send</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
       </v-card-actions>
 
@@ -231,6 +263,11 @@
 export default {
   data() {
     return {
+      picker:'',
+      time: '11:15',
+      datetime : new Date(),
+      now: new Date().toISOString(),
+      dialog11: false,
       dialog5: false,
       rep_text: '',
       dialog3: false,
@@ -260,10 +297,13 @@ export default {
     }
   },
   mounted() {
+    console.log(this.now)
     this.$axios.$get('http://127.0.0.1:8000/api/account/pv/' + this.slug + '/' + this.id)
       .then(response => {
         this.messages = response
+
         this.messagess = this.messages.slice(-10)
+
         console.log(response)
       });
     this.$axios.$get('http://127.0.0.1:8000/api/user/' + this.id)
@@ -311,6 +351,27 @@ export default {
         receiver: this.id,
         reply: this.rep,
 
+      })
+        .then(response => {
+          console.log(response)
+          window.alert('replay sent')
+          window.location.href = "http://127.0.0.1:3000/message/pv/" + this.slug + '/?id=' + this.id
+        }).catch(response => {
+        window.alert(response)
+      })
+    },
+    timeSend() {
+      console.log(this.picker)
+      console.log(this.time.slice(3))
+      this.datetime = new Date(this.picker)
+      this.datetime.setHours(parseInt(this.time.slice(0,2)))
+      this.datetime.setMinutes(parseInt(this.time.slice(3)))
+      console.log(this.datetime)
+      this.$axios.$post('http://127.0.0.1:8000/api/message', {
+        text: this.rep_text,
+        sender: this.slug,
+        receiver: this.id,
+        date: this.datetime
       })
         .then(response => {
           console.log(response)

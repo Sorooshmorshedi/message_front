@@ -208,7 +208,7 @@
                   <v-btn v-if="messages.length > messagess.length" text color="blue" @click="messagess = messages">see more</v-btn>
                   <div v-for="message in messagess">
                     <v-card
-                      v-if="message.sender == slug"
+                      v-if="message.sender == slug && message.date < now"
                       color=#8fcbf2
                       width="400"
                       style="border-radius: 70px 10px 70px 70px;margin-left: 180px;"
@@ -277,7 +277,7 @@
                       width="400"
                       class="mt-2 mb-2"
                       style="border-radius: 10px 70px 70px 70px;"
-                      v-if="message.sender != slug"
+                      v-if="message.sender != slug && message.date < now"
                       color="grey darken-3"
                       dark
                     >
@@ -553,7 +553,7 @@
                   <div v-for="message in messagess">
 
                     <v-card
-                      v-if="message.sender == slug"
+                      v-if="message.sender == slug && message.date < now"
                       color=#8fcbf2
                       width="400"
                       style="border-radius: 70px 10px 70px 70px;margin-left: 180px;"
@@ -622,7 +622,7 @@
                     <v-card
                       width="400"
                       class="mt-2 mb-2"
-                      v-if="message.sender != slug"
+                      v-if="message.sender != slug && message.date < now"
                       style="border-radius: 10px 70px 70px 70px;"
                       color="grey darken-3"
                       dark
@@ -715,6 +715,38 @@
               <v-btn fab small class="primary">
                 <v-icon @click="send">mdi-send</v-icon>
               </v-btn>
+              <v-btn fab x-small class="primary">
+                <v-icon @click="dialog11 = true">mdi-clock</v-icon>
+              </v-btn>
+              <v-dialog
+                v-model="dialog11"
+                max-width="500px"
+              >
+                <v-card class="pa-3">
+                  <v-card-title>
+                    <span>timing message</span>
+                  </v-card-title>
+
+                  <v-time-picker
+                    v-model="time"
+                    :landscape="$vuetify.breakpoint.mdAndUp"
+                    full-width
+                    type="month"
+                  ></v-time-picker>
+                  <v-date-picker v-model="picker" class="ml-16"></v-date-picker>
+                  <v-card-actions>
+                    <v-text-field
+                      class="ml-5 "
+                      label="message"
+                      v-model="rep_text"
+                      outlined
+                    ></v-text-field>
+                    <v-btn fab small class="blue">
+                      <v-icon @click=" timeSend() , dialog11 = false">mdi-send</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
 
             </v-card-actions>
           </v-card>
@@ -895,7 +927,10 @@
 export default {
   data() {
     return {
-
+      now: new Date().toISOString(),
+      picker:'',
+      time: '11:15',
+      datetime : new Date(),
       group: '',
       data: [],
       name: '',
@@ -910,6 +945,7 @@ export default {
       dialog5: false,
       dialog7: false,
       dialog6: false,
+      dialog11: false,
       account: null,
       username: '',
       f_name: '',
@@ -994,6 +1030,29 @@ export default {
   },
 
   methods: {
+    timeSend() {
+      console.log(this.picker)
+      console.log(this.time.slice(3))
+      this.datetime = new Date(this.picker)
+      this.datetime.setHours(parseInt(this.time.slice(0,2)))
+      this.datetime.setMinutes(parseInt(this.time.slice(3)))
+      console.log(this.datetime)
+      this.$axios.$post('http://127.0.0.1:8000/api/message', {
+        text: this.rep_text,
+        sender: this.slug,
+        group: this.id,
+        date: this.datetime
+      })
+        .then(response => {
+          console.log(response)
+          window.alert('replay sent')
+          window.location.href = "http://127.0.0.1:3000/message/group/" + this.slug + '/?id=' + this.id
+        }).catch(response => {
+        window.alert(response)
+      })
+    },
+
+
     setRep(message) {
       console.log(message.id)
       this.rep = message.id
