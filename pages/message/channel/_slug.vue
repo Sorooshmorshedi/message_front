@@ -600,23 +600,19 @@
 
     </div>
 
-    </v-col>
 
-    </v-row>
-    </v-container>
-    </v-card>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   data() {
     return {
       picker:'',
       time: '11:15',
       datetime : new Date(),
-
-      now: new Date().toISOString(),
+      now: moment().format(),
       data: [],
       name: '',
       pic: null,
@@ -730,7 +726,7 @@ export default {
       })
         .then(response => {
           console.log(response)
-          window.alert('replay sent')
+          window.alert('timer message activate')
           window.location.href = "http://127.0.0.1:3000/message/channel/" + this.slug + '/?id=' + this.id
         }).catch(response => {
         window.alert(response)

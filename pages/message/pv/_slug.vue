@@ -251,22 +251,19 @@
 
 
     </v-card>
-    </v-col>
 
-    </v-row>
-    </v-container>
-    </v-card>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   data() {
     return {
       picker:'',
-      time: '11:15',
+      time: '10:10',
       datetime : new Date(),
-      now: new Date().toISOString(),
+      now: moment().format(),
       dialog11: false,
       dialog5: false,
       rep_text: '',
@@ -298,6 +295,7 @@ export default {
   },
   mounted() {
     console.log(this.now)
+    console.log(this.now1)
     this.$axios.$get('http://127.0.0.1:8000/api/account/pv/' + this.slug + '/' + this.id)
       .then(response => {
         this.messages = response
@@ -375,7 +373,7 @@ export default {
       })
         .then(response => {
           console.log(response)
-          window.alert('replay sent')
+          window.alert('timer message activate')
           window.location.href = "http://127.0.0.1:3000/message/pv/" + this.slug + '/?id=' + this.id
         }).catch(response => {
         window.alert(response)

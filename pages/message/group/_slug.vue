@@ -924,10 +924,11 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   data() {
     return {
-      now: new Date().toISOString(),
+      now: moment().format(),
       picker:'',
       time: '11:15',
       datetime : new Date(),
@@ -1045,7 +1046,7 @@ export default {
       })
         .then(response => {
           console.log(response)
-          window.alert('replay sent')
+          window.alert('timer message activate')
           window.location.href = "http://127.0.0.1:3000/message/group/" + this.slug + '/?id=' + this.id
         }).catch(response => {
         window.alert(response)
