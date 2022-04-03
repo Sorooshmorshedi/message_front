@@ -88,6 +88,39 @@
                 <v-btn color="primary" @click="sendMessage" >
                   <v-icon>mdi-send</v-icon>
                 </v-btn>
+                <v-btn fab x-small class="primary">
+                  <v-icon @click="dialog11 = true">mdi-clock</v-icon>
+                </v-btn>
+                <v-dialog
+                  v-model="dialog11"
+                  max-width="500px"
+                >
+                  <v-card class="pa-3">
+                    <v-card-title>
+                      <span>timing message</span>
+                    </v-card-title>
+
+                    <v-time-picker
+                      v-model="time"
+                      :landscape="$vuetify.breakpoint.mdAndUp"
+                      full-width
+                      type="month"
+                    ></v-time-picker>
+                    <v-date-picker v-model="picker" class="ml-16"></v-date-picker>
+                    <v-card-actions>
+                      <v-text-field
+                        class="ml-5 "
+                        label="message"
+                        v-model="message"
+                        outlined
+                      ></v-text-field>
+                      <v-btn fab small class="blue">
+                        <v-icon @click=" timeSend() , dialog11 = false">mdi-send</v-icon>
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+
               </v-card-actions>
 
             </v-card>
@@ -100,9 +133,15 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   data() {
     return {
+      dialog11: false,
+      picker:'',
+      time: '10:10',
+      datetime : new Date(),
+      now: moment().format(),
       data: null,
       message: '',
       pic: null,
@@ -148,6 +187,28 @@ export default {
   },
 
   methods: {
+    timeSend() {
+      console.log(this.picker)
+      console.log(this.time.slice(3))
+      this.datetime = new Date(this.picker)
+      this.datetime.setHours(parseInt(this.time.slice(0,2)))
+      this.datetime.setMinutes(parseInt(this.time.slice(3)))
+      console.log(this.datetime)
+      this.$axios.$post('http://127.0.0.1:8000/api/message', {
+        text: this.message,
+        sender: this.slug,
+        receiver: this.account,
+        date: this.datetime
+      })
+        .then(response => {
+          console.log(response)
+          window.alert('timer message activate')
+          window.location.href = "http://127.0.0.1:3000/message/pv/" + this.slug + '/?id=' + this.account
+        }).catch(response => {
+        window.alert(response)
+      })
+    },
+
     uploadFile() {
       this.file = this.$refs.file.files[0];
       console.log(this.file)
@@ -166,7 +227,7 @@ export default {
         .then(response => {
           console.log(response)
           window.alert('message sent')
-          window.location.href="http://127.0.0.1:3000/profile/" + this.slug
+          window.location.href="http://127.0.0.1:3000/message/pv/" + this.slug + "/?id=" + this.account
         }).catch(response => {
         window.alert(response)
       })
