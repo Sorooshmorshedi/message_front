@@ -39,7 +39,7 @@
             <v-card-subtitle>all the message and information of this channel will be deleted...</v-card-subtitle>
             <v-card-actions >
               <v-btn @click="DeleteChannel" text color="red">delete</v-btn>
-              <v-btn text color="withe">cancell</v-btn>
+              <v-btn @click="dialog = false" text color="withe">cancel</v-btn>
 
             </v-card-actions>
           </v-card>

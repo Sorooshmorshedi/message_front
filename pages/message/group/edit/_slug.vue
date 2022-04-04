@@ -39,8 +39,8 @@
             </v-card-title>
             <v-card-subtitle>all the message and information of this Group will be deleted...</v-card-subtitle>
             <v-card-actions >
-              <v-btn @click="DeleteChannel" text color="red">delete</v-btn>
-              <v-btn text color="withe">cancell</v-btn>
+              <v-btn @click="DeleteGroup" text color="red">delete</v-btn>
+              <v-btn @click="dialog = false" text color="withe">cancell</v-btn>
 
             </v-card-actions>
           </v-card>
@@ -181,7 +181,7 @@ export default {
         window.alert(response)
       })
     },
-    DeleteChannel() {
+    DeleteGroup() {
       this.$axios.$delete('http://127.0.0.1:8000/api/group/' + this.id + '/')
         .then(response => {
           console.log('group deleted')
